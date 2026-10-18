@@ -1,0 +1,6 @@
+{
+  "appId": "com.vpbaqir.miclink",
+  "appName": "MicLink",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
