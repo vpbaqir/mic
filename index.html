@@ -5,12 +5,12 @@
 <meta name="theme-color" content="#edf2fb"><meta name="description" content="Simple live microphone monitoring.">
 <title>MIC — Simple Microphone</title>
 <style>
-:root{color-scheme:light;--bg:#edf2fb;--panel:#edf2fb;--ink:#172849;--muted:#7181a2;--blue:#4f7dff;--violet:#8452ff;--shadow:10px 10px 24px #cbd5e7,-10px -10px 24px #fff;--inset:inset 4px 4px 10px #d2dbea,inset -4px -4px 10px #fff}
+:root{color-scheme:light;--bg:#edf2fb;--panel:#edf2fb;--ink:#172849;--muted:#596b8d;--blue:#4f7dff;--violet:#8452ff;--shadow:10px 10px 24px #cbd5e7,-10px -10px 24px #fff;--inset:inset 4px 4px 10px #d2dbea,inset -4px -4px 10px #fff}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#fff 0%,var(--bg) 60%);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;justify-content:center}
 button,select,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7196ff;outline-offset:3px}
 .app{width:min(100%,480px);min-height:100dvh;padding:clamp(22px,5vw,34px) 22px calc(25px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
 .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(34px,8vh,65px)}
-.brand{font-size:clamp(32px,8vw,42px);font-weight:850;letter-spacing:-.07em;line-height:1}.brand sup{font-size:.45em;color:var(--violet);vertical-align:top}.subtitle{color:#9aa9c4;margin-top:6px;font-size:15px}
+.brand{font-size:clamp(32px,8vw,42px);font-weight:850;letter-spacing:-.07em;line-height:1}.brand sup{font-size:.45em;color:var(--violet);vertical-align:top}.subtitle{color:#7181a2;margin-top:6px;font-size:15px}
 .iconbtn{width:54px;height:54px;border:0;border-radius:50%;background:var(--panel);box-shadow:6px 6px 14px #cbd5e7,-6px -6px 14px #fff;color:#526487;font-size:23px}
 .hero{display:flex;flex-direction:column;align-items:center;text-align:center}
 .mic-wrap{width:min(68vw,260px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:var(--bg);box-shadow:inset 10px 10px 22px #d4deef,inset -10px -10px 22px #fff;position:relative;margin:0 auto 22px}
@@ -21,7 +21,7 @@ button,select,input{font:inherit}button{cursor:pointer;touch-action:manipulation
 .state-title{font-size:clamp(22px,5.5vw,28px);font-weight:800;letter-spacing:-.04em;margin:0}
 .state-desc{color:var(--muted);font-size:15px;margin:4px 0 0}
 .wave{width:100%;height:76px;display:flex;align-items:center;justify-content:center;gap:5px;margin:20px 0 22px}
-.wave span{width:clamp(3px,1.1vw,6px);max-width:7px;height:8px;border-radius:9px;background:linear-gradient(#9dbbff,#a79bff);opacity:.72;transition:height .08s}
+.wave span{width:clamp(3px,1.1vw,6px);max-width:7px;height:4px;border-radius:9px;background:linear-gradient(#9dbbff,#a79bff);opacity:.24;transition:height .08s,opacity .08s}.wave.idle span{height:4px!important;opacity:.2!important}
 .level-card,.setting{background:var(--panel);box-shadow:var(--shadow);border-radius:22px}
 .level-card{padding:20px 20px 18px;width:100%;text-align:left}
 .level-head{display:flex;align-items:center;gap:12px}.level-icon{font-size:24px;color:#53668a}.level-label{font-size:14px;font-weight:650}.level-number{margin-left:auto;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -30,12 +30,12 @@ button,select,input{font:inherit}button{cursor:pointer;touch-action:manipulation
 .settings{display:grid;gap:14px;margin-top:18px}
 .setting{min-height:78px;padding:15px 17px;display:flex;align-items:center;gap:13px}
 .setting-icon{width:43px;height:43px;flex:0 0 43px;border-radius:50%;display:grid;place-items:center;background:var(--bg);box-shadow:inset 3px 3px 7px #d2dbea,inset -3px -3px 7px #fff;color:#53668a}
-.setting-copy{min-width:0;flex:1}.setting-title{font-size:14px;font-weight:750}.setting-sub{font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.setting-copy{min-width:0;flex:1}.setting-title{font-size:14px;font-weight:750}.setting-sub{font-size:12px;color:var(--muted);margin-top:3px;white-space:normal;overflow-wrap:anywhere;line-height:1.35}
 .switch{position:relative;width:56px;height:32px;border:0;border-radius:99px;background:#d3dced;box-shadow:inset 3px 3px 7px #c4cee0,inset -3px -3px 7px #fff;flex:0 0 auto}
 .switch:after{content:"";position:absolute;width:24px;height:24px;left:4px;top:4px;border-radius:50%;background:linear-gradient(145deg,#fff,#e7edf8);box-shadow:2px 2px 5px #b9c5d9;transition:left .18s}
 .switch[aria-checked=true]{background:linear-gradient(110deg,#4b80ff,#7552ff)}
 .switch[aria-checked=true]:after{left:28px;background:#fff}
-select{width:100%;max-width:180px;border:0;outline-offset:3px;color:#526487;background:transparent;font-size:12px;text-align:right}
+select{width: min(46%,190px);min-width:112px;max-width:190px;border:0;outline-offset:3px;color:#405678;background:transparent;font-size:12px;text-align:right;flex:0 0 auto}
 .stop{width:82%;align-self:center;margin-top:22px;min-height:58px;border:0;border-radius:999px;background:linear-gradient(110deg,#ff777f,#e93d65);color:#fff;font-size:17px;font-weight:750;box-shadow:0 12px 24px #ed6b8590;display:flex;justify-content:center;align-items:center;gap:12px}
 .stop:disabled{opacity:.38;box-shadow:none;cursor:not-allowed}
 .output-card{margin-top:14px;padding:17px 20px 18px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow)}.output-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:750}.output-hint{font-size:11px;line-height:1.45;color:var(--muted);margin-top:5px}.output-range{width:100%;margin:13px 0 0;accent-color:#6d62ff}.output-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.safety{margin:12px 2px 0;color:#7181a2;font-size:11px;line-height:1.45;text-align:center}
@@ -48,19 +48,19 @@ select{width:100%;max-width:180px;border:0;outline-offset:3px;color:#526487;back
 </head>
 <body>
 <main class="app">
-<header class="top"><div><div class="brand">MIC<sup>•</sup></div><div class="subtitle">Simple Microphone</div></div><button class="iconbtn" id="settingsBtn" aria-label="Show audio settings" title="Audio settings">⚙</button></header>
+<header class="top"><div><div class="brand">MIC<sup>•</sup></div><div class="subtitle">Simple Microphone</div></div><button class="iconbtn" id="settingsBtn" aria-label="Audio settings" title="Audio settings" aria-expanded="false">⚙</button></header>
 <section class="hero" aria-label="Microphone">
 <div class="mic-wrap"><button class="mic-button" id="micButton" aria-label="Tap to start microphone" aria-pressed="false"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><rect x="24" y="5" width="16" height="34" rx="8" fill="currentColor"/><path d="M14 30v3a18 18 0 0 0 36 0v-3M32 51v8" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/></svg></button></div>
 <h1 class="state-title" id="stateTitle">Tap to start</h1><p class="state-desc" id="stateDesc">Your voice, in real time.</p>
-<div class="wave" id="wave" role="img" aria-label="Live audio waveform"></div>
+<div class="wave idle" id="wave" role="img" aria-label="Microphone inactive"></div>
 </section>
 <section class="level-card" aria-label="Microphone input level"><div class="level-head"><span class="level-icon" aria-hidden="true">▥</span><span class="level-label">Input Level</span><span class="level-number" id="levelNumber">0%</span></div><div class="track"><div class="fill" id="levelFill"></div></div></section>
-<section class="settings" id="settings">
+<button class="stop" id="stopButton" disabled><span aria-hidden="true">■</span> Stop microphone</button>\n<section class="settings" id="settings">
 <div class="setting"><span class="setting-icon" aria-hidden="true">♬</span><div class="setting-copy"><div class="setting-title">Monitoring</div><div class="setting-sub" id="monitorText">Off — turn on when needed</div></div><button class="switch" id="monitorSwitch" role="switch" aria-checked="false" aria-label="Enable audio monitoring"></button></div>
 <div class="setting"><span class="setting-icon" aria-hidden="true">♩</span><div class="setting-copy"><div class="setting-title">Microphone</div><div class="setting-sub" id="deviceLabel">Default device</div></div><select id="deviceSelect" aria-label="Choose microphone"><option value="">Default device</option></select></div>
 <div class="setting"><span class="setting-icon" aria-hidden="true">♫</span><div class="setting-copy"><div class="setting-title">Speaker output</div><div class="setting-sub">Uses Android’s active audio output</div></div></div>
 </section>
-<section class="output-card" aria-label="Output volume control"><div class="output-head"><label for="outputVolume">Output volume</label><span id="outputVolumeValue">15%</span></div><input class="output-range" id="outputVolume" type="range" min="0" max="100" value="15" aria-label="Output volume"><div class="output-ends"><span>Low</span><span>High</span></div><p class="output-hint">Bluetooth routing is controlled by Android. Confirm your speaker is selected in your phone’s audio output settings.</p></section>
+<section class="output-card" aria-label="Output volume control"><div class="output-head"><label for="outputVolume">Monitoring volume</label><span id="outputVolumeValue">15%</span></div><input class="output-range" id="outputVolume" type="range" min="0" max="100" value="15" aria-label="Output volume"><div class="output-ends"><span>Low</span><span>High</span></div><p class="output-hint">Controls this app’s monitoring level, not your phone’s speaker volume. Choose your Bluetooth speaker in Android audio output settings.</p></section>
 <p class="safety">Start with low volume. If you hear echo or squealing, stop monitoring and move the phone away from the speaker.</p>
 <button class="stop" id="stopButton" disabled><span aria-hidden="true">■</span> Stop</button>
 <div class="error" id="error" role="alert"></div>
@@ -71,10 +71,10 @@ select{width:100%;max-width:180px;border:0;outline-offset:3px;color:#526487;back
 const $=id=>document.getElementById(id);
 const wave=$('wave');for(let i=0;i<27;i++){const s=document.createElement('span');wave.appendChild(s)}
 let stream=null,ctx=null,source=null,analyser=null,gainNode=null,monitorGain=null,raf=0,starting=false,monitoring=false;
-function status(title,desc,live){$('stateTitle').textContent=title;$('stateDesc').textContent=desc;$('micButton').classList.toggle('live',!!live);$('micButton').setAttribute('aria-pressed',String(!!live));$('micButton').setAttribute('aria-label',live?'Stop microphone':'Tap to start microphone');}
+function status(title,desc,live){$('stateTitle').textContent=title;$('stateDesc').textContent=desc;$('micButton').classList.toggle('live',!!live);$('micButton').setAttribute('aria-pressed',String(!!live));$('micButton').setAttribute('aria-label',live?'Stop microphone':'Tap to start microphone');wave.classList.toggle('idle',!live);wave.setAttribute('aria-label',live?'Live microphone waveform':'Microphone inactive');}
 function error(message){$('error').textContent=message;$('error').style.display='block'}
 function clearError(){$('error').style.display='none';$('error').textContent=''}
-function resetMeter(){ $('levelNumber').textContent='0%';$('levelFill').style.width='0%';wave.querySelectorAll('span').forEach(s=>s.style.height='8px');}
+function resetMeter(){ $('levelNumber').textContent='0%';$('levelFill').style.width='0%';wave.classList.add('idle');wave.setAttribute('aria-label','Microphone inactive');wave.querySelectorAll('span').forEach(s=>{s.style.height='4px';s.style.opacity='.2'});}
 function stopMic(){cancelAnimationFrame(raf);raf=0;if(stream)stream.getTracks().forEach(t=>{t.onended=null;t.stop()});if(ctx&&ctx.state!=='closed')ctx.close().catch(()=>{});stream=null;ctx=null;source=null;analyser=null;gainNode=null;monitorGain=null;starting=false;$('micButton').disabled=false;$('stopButton').disabled=true;status('Tap to start','Your voice, in real time.',false);resetMeter();}
 async function refreshDevices(){if(!navigator.mediaDevices?.enumerateDevices)return;try{const list=await navigator.mediaDevices.enumerateDevices();const current=$('deviceSelect').value;const inputs=list.filter(d=>d.kind==='audioinput');$('deviceSelect').replaceChildren(new Option('Default device',''));inputs.forEach((d,i)=>$('deviceSelect').add(new Option(d.label||'Microphone '+(i+1),d.deviceId)));if(inputs.some(d=>d.deviceId===current))$('deviceSelect').value=current;$('deviceLabel').textContent=$('deviceSelect').selectedOptions[0]?.textContent||'Default device';}catch(_){}}
 async function startMic(){if(starting||stream)return;starting=true;clearError();$('micButton').disabled=true;status('Connecting…','Allow microphone access',false);try{if(!navigator.mediaDevices?.getUserMedia)throw new Error('Open this page over HTTPS in a modern browser to use the microphone.');const id=$('deviceSelect').value;stream=await navigator.mediaDevices.getUserMedia({audio:{...(id?{deviceId:{exact:id}}:{}),echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('This browser does not support live audio. Try an updated Chrome browser.');ctx=new AC({latencyHint:'interactive'});await ctx.resume();source=ctx.createMediaStreamSource(stream);gainNode=ctx.createGain();analyser=ctx.createAnalyser();analyser.fftSize=256;analyser.smoothingTimeConstant=.7;monitorGain=ctx.createGain();monitorGain.gain.value=monitoring?Number($('outputVolume').value)/100:0;source.connect(gainNode);gainNode.connect(analyser);analyser.connect(monitorGain);monitorGain.connect(ctx.destination);starting=false;$('micButton').disabled=false;$('stopButton').disabled=false;status('Listening…','Your voice is live now.',true);draw();await refreshDevices();stream.getAudioTracks().forEach(t=>t.onended=()=>{if(stream){stopMic();error('Microphone disconnected. Check your permissions and try again.')}});}catch(e){stopMic();const m={NotAllowedError:'Microphone permission denied. Allow access in your browser settings and try again.',NotFoundError:'No microphone found on this device.',NotReadableError:'Microphone is busy. Close other apps using it and retry.'};error(m[e.name]||e.message||'Could not start the microphone. Check permissions and try again.');}}
@@ -83,7 +83,7 @@ $('micButton').addEventListener('click',()=>stream?stopMic():startMic());$('stop
 $('monitorSwitch').addEventListener('click',()=>{monitoring=!monitoring;$('monitorSwitch').setAttribute('aria-checked',String(monitoring));$('monitorText').textContent=monitoring?'On — voice monitoring enabled':'Off — turn on when needed';if(monitorGain&&ctx)monitorGain.gain.setTargetAtTime(monitoring?Number($('outputVolume').value)/100:0,ctx.currentTime,.02);});
 $('deviceSelect').addEventListener('change',async()=>{const label=$('deviceSelect').selectedOptions[0]?.textContent||'Default device';$('deviceLabel').textContent=label;if(stream){stopMic();await startMic();if(!stream)$('deviceLabel').textContent=label+' — failed to reconnect';}});
 $('outputVolume').addEventListener('input',()=>{const v=Number($('outputVolume').value);$('outputVolumeValue').textContent=v+'%';if(monitorGain&&ctx&&monitoring)monitorGain.gain.setTargetAtTime(v/100,ctx.currentTime,.025);});
-$('settingsBtn').addEventListener('click',()=>$('settings').scrollIntoView({behavior:'smooth',block:'center'}));
+$('settingsBtn').addEventListener('click',()=>{const open=$('settingsBtn').getAttribute('aria-expanded')==='true';$('settingsBtn').setAttribute('aria-expanded',String(!open));$('settings').classList.toggle('settings-open',!open);$('settings').scrollIntoView({behavior:'smooth',block:open?'nearest':'center'});if(!open)$('deviceSelect').focus({preventScroll:true});});
 document.addEventListener('visibilitychange',()=>{if(ctx&&stream){if(document.hidden)ctx.suspend().catch(()=>{});else ctx.resume().catch(()=>{});}});
 window.addEventListener('pagehide',stopMic);
 if(navigator.mediaDevices?.addEventListener)navigator.mediaDevices.addEventListener('devicechange',refreshDevices);
