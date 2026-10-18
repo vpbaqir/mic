@@ -1,0 +1,17 @@
+{
+  "name": "miclink",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Phone microphone monitor for Bluetooth speaker output",
+  "scripts": {
+    "android:sync": "cap sync android",
+    "android:debug": "cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3"
+  }
+}
