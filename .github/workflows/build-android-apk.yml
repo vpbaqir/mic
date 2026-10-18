@@ -21,6 +21,21 @@ jobs:
       - run: npm install
       - run: npx cap add android
       - run: npx cap sync android
+      - name: Declare Android microphone permissions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("android/app/src/main/AndroidManifest.xml")
+          manifest = path.read_text()
+          permissions = [
+              '    <uses-permission android:name="android.permission.RECORD_AUDIO" />',
+              '    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />',
+          ]
+          for permission in permissions:
+              if permission not in manifest:
+                  manifest = manifest.replace("<application", "\n".join(permissions) + "\n    <application", 1)
+          path.write_text(manifest)
+          PY
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
