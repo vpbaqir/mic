@@ -1,61 +1,162 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#101418" />
-<meta name="description" content="Use your phone microphone as a live mic with a Bluetooth speaker." />
-<title>MicLink — Phone Mic to Speaker</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101310">
+<meta name="description" content="A simple phone microphone monitor for your connected speaker.">
+<title>MicLink — Live Microphone</title>
 <style>
-:root{color-scheme:dark;--bg:#101418;--panel:#191f25;--panel2:#222a32;--text:#f3f6f8;--muted:#a5b0bb;--accent:#b6f36b;--line:#303943;--danger:#ff937e}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1d2929 0%,var(--bg) 55%);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
-main{width:min(760px,100%);margin:auto;padding:26px 18px 60px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.brand{display:flex;align-items:center;gap:10px;font-weight:750;letter-spacing:-.03em;font-size:20px}.logo{width:38px;height:38px;display:grid;place-items:center;background:var(--accent);color:#101418;border-radius:13px;font-size:21px}.pill{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
-h1{font-size:clamp(32px,7vw,52px);letter-spacing:-.055em;line-height:1.03;margin:0 0 12px;max-width:560px}.sub{margin:0 0 24px;color:var(--muted);max-width:580px}
-.card{background:linear-gradient(145deg,#202830,#171d23);border:1px solid var(--line);border-radius:24px;padding:22px;margin:18px 0;box-shadow:0 18px 50px #0002}.statusrow{display:flex;gap:12px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;background:#71808b;box-shadow:0 0 0 5px #71808b22}.dot.live{background:var(--accent);box-shadow:0 0 0 5px #b6f36b22}.status{font-weight:700}.small{font-size:13px;color:var(--muted)}
-.meter{display:flex;gap:4px;align-items:center;height:58px;margin:24px 0}.bar{flex:1;min-width:3px;max-width:9px;border-radius:5px;background:#46515a;height:8px;transition:height .08s}.bar.active{background:var(--accent)}
-.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:14px;padding:14px 18px;min-height:50px;font:inherit;font-weight:750;cursor:pointer;transition:transform .15s,opacity .15s}.btn:active{transform:scale(.98)}.btn.primary{background:var(--accent);color:#101418;flex:1}.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}.btn:disabled{opacity:.4;cursor:not-allowed}
-.control{margin-top:22px}.controlhead{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px;font-weight:650}.value{color:var(--accent);font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
-.notice{border:1px solid #5e6041;background:#25291e;color:#d7e2c2;padding:14px 16px;border-radius:16px;font-size:14px;margin:16px 0}.notice strong{color:var(--accent)}.error{display:none;border:1px solid #754b45;background:#2d201f;color:#ffd0c6;border-radius:14px;padding:13px;margin-top:14px;font-size:14px}.sectiontitle{font-size:19px;letter-spacing:-.02em;margin:0 0 12px}.steps{display:grid;gap:12px}.step{display:flex;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}.step:last-child{border:0}.num{flex:0 0 30px;height:30px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;font-weight:800;color:var(--accent)}.step p{margin:0}.step .small{display:block;margin-top:3px}.faq details{padding:14px 0;border-bottom:1px solid var(--line)}.faq summary{cursor:pointer;font-weight:650}.faq p{color:var(--muted);margin:9px 0 0}.footer{margin:24px 0 0;text-align:center;color:var(--muted);font-size:12px}
-@media(min-width:650px){main{padding-top:38px}.card{padding:28px}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start}.layout .card{margin:0}.actions .btn{flex:initial}}
+:root{color-scheme:dark;--bg:#101310;--surface:#191d19;--surface2:#202620;--line:#303830;--text:#f3f5ef;--muted:#a4ada0;--lime:#c7f36b;--red:#ff897c;--radius:24px}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -12%,#293322 0,transparent 42%),var(--bg);color:var(--text);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}
+button{touch-action:manipulation}
+main{width:min(100%,760px);margin:auto;padding:22px 16px calc(36px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;margin:0 0 38px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.04em;font-size:19px}
+.logo{width:38px;height:38px;border-radius:13px;background:var(--lime);color:#101310;display:grid;place-items:center;font-size:24px}
+.tag{border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:11px;font-weight:750;letter-spacing:.09em}
+.hero{margin-bottom:26px}
+.eyebrow{color:var(--lime);font-size:12px;letter-spacing:.14em;font-weight:800;text-transform:uppercase;margin:0 0 12px}
+h1{font-size:clamp(37px,8vw,58px);line-height:.99;letter-spacing:-.065em;margin:0 0 14px;font-weight:800}
+.hero p{color:var(--muted);max-width:520px;margin:0;font-size:15px}
+.panel{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,#1d231d,#171b17);padding:22px;margin:16px 0;box-shadow:0 20px 60px #0002}
+.statusline{display:flex;align-items:center;gap:12px}
+.statusdot{width:10px;height:10px;flex:0 0 auto;border-radius:50%;background:#687264;box-shadow:0 0 0 5px #68726420}
+.statusdot.live{background:var(--lime);box-shadow:0 0 0 5px #c7f36b22}
+.statusdot.error{background:var(--red);box-shadow:0 0 0 5px #ff897c22}
+.statusname{font-weight:800;letter-spacing:-.02em}
+.statusdetail{font-size:13px;color:var(--muted);margin-top:1px}
+.meterwrap{height:92px;display:flex;align-items:center;margin:24px 0 20px;padding:10px 0}
+.meter{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;height:70px}
+.bar{flex:1;max-width:8px;min-width:2px;height:6px;background:#3c4638;border-radius:999px;transition:height .07s ease,background .1s}
+.bar.active{background:var(--lime)}
+.actions{display:grid;grid-template-columns:1fr auto;gap:10px}
+.btn{border:0;border-radius:15px;min-height:54px;padding:13px 17px;font-weight:800;cursor:pointer;transition:transform .12s,opacity .12s}
+.btn:active{transform:scale(.985)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+.btn.primary{background:var(--lime);color:#11150e}
+.btn.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--line);min-width:104px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.control{margin-top:26px}
+.controlhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px;font-size:14px;font-weight:700}
+.value{color:var(--lime);font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;margin:0;accent-color:var(--lime);cursor:pointer;min-height:24px}
+.ends{display:flex;justify-content:space-between;color:#7f897b;font-size:11px;margin-top:4px}
+.mute-row{margin-top:16px}
+.btn.mute{width:100%;background:transparent;border:1px solid var(--line);color:var(--text);min-height:46px}
+.error{display:none;margin-top:15px;padding:13px 14px;border:1px solid #74443e;background:#2c1e1b;color:#ffd0c9;border-radius:14px;font-size:13px}
+.note{display:flex;gap:12px;align-items:flex-start;background:#252a1e;border:1px solid #424b32;padding:15px;border-radius:17px;color:#dce6cf;font-size:13px;margin-top:18px}
+.noteicon{display:grid;place-items:center;flex:0 0 25px;height:25px;border-radius:8px;background:#39442b;color:var(--lime);font-weight:900}
+.note strong{color:var(--lime)}
+.sectionhead{font-size:18px;letter-spacing:-.035em;margin:0 0 16px}
+.steps{display:grid;gap:15px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.stepnum{width:29px;height:29px;flex:0 0 29px;display:grid;place-items:center;border-radius:10px;background:var(--surface2);color:var(--lime);font-weight:800;font-size:13px}
+.step strong{font-size:14px}
+.step p{margin:1px 0 0;color:var(--muted);font-size:13px}
+.faq details{border-top:1px solid var(--line);padding:14px 0}
+.faq details:first-of-type{border-top:0;padding-top:0}
+.faq summary{font-size:14px;font-weight:750;cursor:pointer}
+.faq details p{color:var(--muted);font-size:13px;margin:8px 0 0}
+.footer{text-align:center;color:#7f897b;font-size:12px;padding:10px 0 0}
+@media(min-width:620px){main{padding:34px 24px 48px}.panel{padding:27px}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start}.grid>.panel{margin:0}.hero{margin-bottom:30px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
-<body><main>
-<header class="top"><div class="brand"><span class="logo">⌁</span> MicLink</div><span class="pill">MICROPHONE MONITOR</span></header>
-<section><h1>Your phone.<br/>Your live mic.</h1><p class="sub">Speak into your phone and monitor your voice through your selected audio output. Pair a Bluetooth speaker first, then start the mic below.</p></section>
-<div class="layout"><section class="card" aria-label="Live microphone controls">
-<div class="statusrow"><span id="dot" class="dot"></span><div><div id="status" class="status" role="status">Ready to connect</div><div id="detail" class="small">Microphone is off</div></div></div>
-<div class="meter" id="meter" role="img" aria-label="Microphone sound level meter"></div>
-<div class="actions"><button id="start" class="btn primary">▶ Start microphone</button><button id="stop" class="btn secondary" disabled>Stop</button></div>
-<div class="control"><div class="controlhead"><label for="gain">Mic sensitivity</label><span class="value" id="gainVal">100%</span></div><input id="gain" type="range" min="0" max="200" value="100" step="5" /></div>
-<div class="control"><div class="controlhead"><label for="volume">Monitor volume</label><span class="value" id="volumeVal">70%</span></div><input id="volume" type="range" min="0" max="100" value="70" /></div>
-<div class="actions" style="margin-top:18px"><button id="mute" class="btn secondary" disabled>Mute output</button></div>
+<body>
+<main>
+<header><div class="brand"><span class="logo" aria-hidden="true">⌁</span><span>MicLink</span></div><span class="tag">LIVE MIC</span></header>
+<section class="hero"><p class="eyebrow">Simple. Direct. Live.</p><h1>Your voice,<br>through your speaker.</h1><p>Connect your Bluetooth speaker in your phone settings, then start the microphone. Keep the volume low at first.</p></section>
+<div class="grid">
+<section class="panel" aria-label="Microphone controls">
+<div class="statusline"><span id="dot" class="statusdot" aria-hidden="true"></span><div><div id="status" class="statusname" role="status" aria-live="polite">Ready when you are</div><div id="detail" class="statusdetail">Microphone is off</div></div></div>
+<div class="meterwrap"><div id="meter" class="meter" role="img" aria-label="Live microphone level"></div></div>
+<div class="actions"><button id="start" class="btn primary">Start microphone</button><button id="stop" class="btn secondary" disabled>Stop</button></div>
+<div class="control"><div class="controlhead"><label for="gain">Mic sensitivity</label><span id="gainVal" class="value">100%</span></div><input id="gain" type="range" min="0" max="200" value="100" step="5" aria-label="Microphone sensitivity"><div class="ends"><span>Low</span><span>High</span></div></div>
+<div class="control"><div class="controlhead"><label for="volume">Output volume</label><span id="volumeVal" class="value">35%</span></div><input id="volume" type="range" min="0" max="100" value="35" aria-label="Output volume"><div class="ends"><span>Quiet</span><span>Loud</span></div></div>
+<div class="mute-row"><button id="mute" class="btn mute" disabled>Mute output</button></div>
 <div id="error" class="error" role="alert"></div>
+<div class="note"><span class="noteicon" aria-hidden="true">!</span><div><strong>Avoid audio feedback.</strong> Keep your phone away from the speaker and increase volume slowly. If you hear a squeal, lower the speaker volume immediately.</div></div>
 </section>
-<section class="card"><h2 class="sectiontitle">Before you start</h2><div class="steps">
-<div class="step"><span class="num">1</span><p><strong>Pair your speaker</strong><span class="small">Open Android Settings → Bluetooth and connect your speaker.</span></p></div>
-<div class="step"><span class="num">2</span><p><strong>Return to this page</strong><span class="small">Use Chrome and allow microphone access when prompted.</span></p></div>
-<div class="step"><span class="num">3</span><p><strong>Start the microphone</strong><span class="small">Check that your speaker is the active media output.</span></p></div>
-</div><div class="notice"><strong>Prevent feedback:</strong> Start at low volume. Keep your phone behind and away from the speaker, and raise volume slowly.</div></section></div>
-<section class="card"><h2 class="sectiontitle">Important compatibility note</h2><p class="small">This web app processes microphone audio in your browser. Android and browser versions control which output device receives the sound; a web page cannot guarantee Bluetooth routing on every phone. Bluetooth may also add noticeable delay. Use headphones or a wired PA input for lower latency when needed.</p></section>
-<section class="card faq"><h2 class="sectiontitle">Troubleshooting</h2>
-<details><summary>I can't hear my voice</summary><p>Confirm the Bluetooth speaker is connected and selected as Android's media output. Raise Monitor volume gradually, then restart the microphone. Some browser/device combinations do not route real-time Web Audio to Bluetooth correctly.</p></details>
-<details><summary>The sound squeals or echoes</summary><p>Lower the speaker volume immediately and move the phone farther from the speaker. The speaker output can re-enter the phone microphone and cause feedback.</p></details>
-<details><summary>Microphone permission failed</summary><p>Allow microphone access in Chrome's site settings. Microphone access requires HTTPS or localhost. Close other apps that may be using the microphone.</p></details>
+<section class="panel"><h2 class="sectionhead">Set up in seconds</h2><div class="steps">
+<div class="step"><span class="stepnum">1</span><div><strong>Connect your speaker</strong><p>Open your phone's Bluetooth settings and connect the speaker.</p></div></div>
+<div class="step"><span class="stepnum">2</span><div><strong>Allow microphone access</strong><p>Return to MicLink and allow the microphone permission when asked.</p></div></div>
+<div class="step"><span class="stepnum">3</span><div><strong>Start speaking</strong><p>Tap Start microphone and check that sound comes from your selected output.</p></div></div>
+</div></section>
+</div>
+<section class="panel faq"><h2 class="sectionhead">If it doesn't work</h2>
+<details><summary>I can't hear anything</summary><p>Confirm the speaker is connected and selected as your phone's media output. Check the phone's media volume and MicLink's output volume. Some phone/browser combinations do not route live browser audio to Bluetooth reliably.</p></details>
+<details><summary>I can't allow the microphone</summary><p>Open this page in Chrome or another modern browser over HTTPS. Check the browser's site permissions and close other apps that may be using the microphone.</p></details>
+<details><summary>There is a delay</summary><p>Bluetooth audio can have noticeable latency. This depends on your speaker, phone and Bluetooth codec. A wired audio connection generally has less delay.</p></details>
 </section>
-<p class="footer">MicLink runs in your browser. No account required. Microphone audio is not uploaded by this page.</p>
+<p class="footer">MicLink processes audio on your device. It does not upload or record your voice.</p>
 </main>
 <script>
-const $=id=>document.getElementById(id);
-const meter=$('meter');for(let i=0;i< forty();i++){const b=document.createElement('span');b.className='bar';meter.appendChild(b)}function forty(){return 40}
-let stream=null,ctx=null,source=null,gainNode=null,analyser=null,output=null,raf=0,muted=false;
-function showError(msg){$('error').style.display='block';$('error').textContent=msg}
-function clearError(){$('error').style.display='none';$('error').textContent=''}
-function stopMic(){cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());if(ctx&&ctx.state!=='closed')ctx.close().catch(()=>{});stream=ctx=source=gainNode=analyser=output=null;muted=false;$('dot').classList.remove('live');$('status').textContent='Ready to connect';$('detail').textContent='Microphone is off';$('start').disabled=false;$('stop').disabled=true;$('mute').disabled=true;$('mute').textContent='Mute output';document.querySelectorAll('.bar').forEach(b=>{b.style.height='8px';b.classList.remove('active')})}
-async function startMic(){clearError();$('start').disabled=true;try{if(!navigator.mediaDevices?.getUserMedia)throw new Error('Microphone access is not available. Open this page in a modern browser over HTTPS.');stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});ctx=new(window.AudioContext||window.webkitAudioContext)();await ctx.resume();source=ctx.createMediaStreamSource(stream);gainNode=ctx.createGain();gainNode.gain.value=Number($('gain').value)/100;analyser=ctx.createAnalyser();analyser.fftSize=128;output=ctx.createGain();output.gain.value=Number($('volume').value)/100;source.connect(gainNode);gainNode.connect(analyser);gainNode.connect(output);output.connect(ctx.destination);$('dot').classList.add('live');$('status').textContent='Microphone is live';$('detail').textContent='Speak to check your level';$('stop').disabled=false;$('mute').disabled=false;drawMeter()}catch(e){stopMic();showError(e.name==='NotAllowedError'?'Microphone permission was denied. Allow microphone access in your browser settings and try again.':e.name==='NotFoundError'?'No microphone was found on this device.':e.message||'Could not start the microphone.')}}
-function drawMeter(){if(!analyser)return;const data=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(data);const bars=document.querySelectorAll('.bar');bars.forEach((bar,i)=>{const v=data[Math.floor(i*data.length/bars.length)]||0;bar.style.height=(5+v*.42)+'px';bar.classList.toggle('active',v>20)});raf=requestAnimationFrame(drawMeter)}
-$('start').addEventListener('click',startMic);$('stop').addEventListener('click',stopMic);
-$('gain').addEventListener('input',()=>{ $('gainVal').textContent=$('gain').value+'%';if(gainNode)gainNode.gain.setTargetAtTime(Number($('gain').value)/100,ctx.currentTime,.02)});
-$('volume').addEventListener('input',()=>{$('volumeVal').textContent=$('volume').value+'%';if(output&&!muted)output.gain.setTargetAtTime(Number($('volume').value)/100,ctx.currentTime,.02)});
-$('mute').addEventListener('click',()=>{if(!output)return;muted=!muted;output.gain.setTargetAtTime(muted?0:Number($('volume').value)/100,ctx.currentTime,.02);$('mute').textContent=muted?'Unmute output':'Mute output'});
+'use strict';
+const $ = id => document.getElementById(id);
+const meter = $('meter');
+for (let i = 0; i <  forty(); i++) { const bar = document.createElement('span'); bar.className = 'bar'; meter.appendChild(bar); }
+function forty(){ return 40; }
+let stream = null, ctx = null, source = null, gainNode = null, analyser = null, output = null, raf = 0, muted = false, starting = false;
+function clearError(){ $('error').style.display='none'; $('error').textContent=''; }
+function showError(message){ $('error').textContent=message; $('error').style.display='block'; $('dot').classList.add('error'); }
+function setStatus(title, detail, live=false){ $('status').textContent=title; $('detail').textContent=detail; $('dot').classList.toggle('live',live); if(live) $('dot').classList.remove('error'); }
+function resetMeter(){ $('meter').querySelectorAll('.bar').forEach(bar=>{bar.style.height='6px';bar.classList.remove('active');}); }
+function stopMic(){
+ cancelAnimationFrame(raf); raf=0;
+ if(stream){stream.getTracks().forEach(track=>{track.onended=null;track.stop();});}
+ if(ctx && ctx.state!=='closed'){const old=ctx;old.close().catch(()=>{});}
+ stream=null;ctx=null;source=null;gainNode=null;analyser=null;output=null;muted=false;starting=false;
+ $('start').disabled=false;$('stop').disabled=true;$('mute').disabled=true;$('mute').textContent='Mute output';
+ setStatus('Ready when you are','Microphone is off');resetMeter();
+}
+async function startMic(){
+ if(starting || stream) return;
+ clearError();starting=true;$('start').disabled=true;$('status').textContent='Requesting microphone…';$('detail').textContent='Allow access when prompted';
+ try{
+  if(!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Microphone access needs a secure page. Open MicLink using its HTTPS website in a modern browser.');
+  stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});
+  const AudioContextClass=window.AudioContext||window.webkitAudioContext;
+  if(!AudioContextClass) throw new Error('This browser does not support live audio processing. Try an updated Chrome browser.');
+  ctx=new AudioContextClass({latencyHint:'interactive'});
+  await ctx.resume();
+  source=ctx.createMediaStreamSource(stream);
+  gainNode=ctx.createGain();gainNode.gain.value=Number($('gain').value)/100;
+  analyser=ctx.createAnalyser();analyser.fftSize=256;analyser.smoothingTimeConstant=.65;
+  output=ctx.createGain();output.gain.value=Number($('volume').value)/100;
+  source.connect(gainNode);gainNode.connect(analyser);analyser.connect(output);output.connect(ctx.destination);
+  stream.getAudioTracks().forEach(track=>{track.onended=()=>{if(stream) {stopMic();showError('The microphone disconnected. Check permissions and try again.');}};});
+  starting=false;$('start').disabled=true;$('stop').disabled=false;$('mute').disabled=false;
+  setStatus('Microphone is live','Speak to check your level',true);drawMeter();
+ }catch(error){
+  stopMic();
+  const messages={
+   NotAllowedError:'Microphone permission was denied. Allow microphone access in your browser or phone settings, then try again.',
+   NotFoundError:'No microphone was found. Check your device microphone and try again.',
+   NotReadableError:'The microphone is busy or unavailable. Close other apps using it, then try again.',
+   OverconstrainedError:'Your microphone does not support the requested settings. Try again in another browser.'
+  };
+  showError(messages[error.name]||error.message||'MicLink could not start the microphone. Check your browser permissions and try again.');
+ }
+}
+function drawMeter(){
+ if(!analyser||!ctx||ctx.state==='closed')return;
+ const data=new Uint8Array(analyser.fftSize);analyser.getByteTimeDomainData(data);
+ let sum=0;for(let i=0;i<data.length;i++){const x=(data[i]-128)/128;sum+=x*x;}
+ const level=Math.min(1,Math.sqrt(sum/data.length)*3.8);
+ const bars=$('meter').querySelectorAll('.bar');
+ bars.forEach((bar,i)=>{const distance=Math.abs(i-(bars.length-1)/2)/((bars.length-1)/2);const envelope=Math.max(0,level*(1-distance*.48));const wave=level>.015?Math.max(.08,envelope*(.72+.28*Math.sin(i*1.7+performance.now()/150))):.08;bar.style.height=(5+wave*58)+'px';bar.classList.toggle('active',level>.025&&wave>.08);});
+ raf=requestAnimationFrame(drawMeter);
+}
+$('start').addEventListener('click',startMic);
+$('stop').addEventListener('click',stopMic);
+$('gain').addEventListener('input',()=>{$('gainVal').textContent=$('gain').value+'%';if(gainNode&&ctx)gainNode.gain.setTargetAtTime(Number($('gain').value)/100,ctx.currentTime,.025);});
+$('volume').addEventListener('input',()=>{$('volumeVal').textContent=$('volume').value+'%';if(output&&ctx&&!muted)output.gain.setTargetAtTime(Number($('volume').value)/100,ctx.currentTime,.025);});
+$('mute').addEventListener('click',()=>{if(!output||!ctx)return;muted=!muted;output.gain.setTargetAtTime(muted?0:Number($('volume').value)/100,ctx.currentTime,.02);$('mute').textContent=muted?'Unmute output':'Mute output';});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&ctx&&ctx.state==='running')ctx.suspend().catch(()=>{});else if(!document.hidden&&ctx&&stream)ctx.resume().catch(()=>{});});
 window.addEventListener('pagehide',stopMic);
-</script></body></html>
+</script>
+</body>
+</html>
