@@ -27,7 +27,9 @@ button,select,input{font:inherit}button{cursor:pointer;touch-action:manipulation
 .level-head{display:flex;align-items:center;gap:12px}.level-icon{font-size:24px;color:#53668a}.level-label{font-size:14px;font-weight:650}.level-number{margin-left:auto;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
 .track{height:13px;border-radius:99px;background:#d7e0f0;box-shadow:var(--inset);margin:16px 0 0 36px;overflow:hidden}
 .fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#4d8dff,#8d48fa);transition:width .08s}
-.settings{display:grid;gap:14px;margin-top:18px}
+.settings-panel{margin-top:18px}
+#settingsPanel[hidden]{display:none!important}
+.settings{display:grid;gap:14px;margin-top:0}
 .setting{min-height:78px;padding:15px 17px;display:flex;align-items:center;gap:13px}
 .setting-icon{width:43px;height:43px;flex:0 0 43px;border-radius:50%;display:grid;place-items:center;background:var(--bg);box-shadow:inset 3px 3px 7px #d2dbea,inset -3px -3px 7px #fff;color:#53668a}
 .setting-copy{min-width:0;flex:1}.setting-title{font-size:14px;font-weight:750}.setting-sub{font-size:12px;color:var(--muted);margin-top:3px;white-space:normal;overflow-wrap:anywhere;line-height:1.35}
@@ -55,14 +57,16 @@ select{width: min(46%,190px);min-width:112px;max-width:190px;border:0;outline-of
 <div class="wave idle" id="wave" role="img" aria-label="Microphone inactive"></div>
 </section>
 <section class="level-card" aria-label="Microphone input level"><div class="level-head"><span class="level-icon" aria-hidden="true">▥</span><span class="level-label">Input Level</span><span class="level-number" id="levelNumber">0%</span></div><div class="track"><div class="fill" id="levelFill"></div></div></section>
-<button class="stop" id="stopButton" disabled><span aria-hidden="true">■</span> Stop microphone</button>\n<section class="settings" id="settings">
+<button class="stop" id="stopButton" disabled><span aria-hidden="true">■</span> Stop microphone</button>
+<section class="settings-panel" id="settingsPanel" aria-label="Audio settings" tabindex="-1" hidden>
+<section class="settings" id="settings">
 <div class="setting"><span class="setting-icon" aria-hidden="true">♬</span><div class="setting-copy"><div class="setting-title">Monitoring</div><div class="setting-sub" id="monitorText">Off — turn on when needed</div></div><button class="switch" id="monitorSwitch" role="switch" aria-checked="false" aria-label="Enable audio monitoring"></button></div>
 <div class="setting"><span class="setting-icon" aria-hidden="true">♩</span><div class="setting-copy"><div class="setting-title">Microphone</div><div class="setting-sub" id="deviceLabel">Default device</div></div><select id="deviceSelect" aria-label="Choose microphone"><option value="">Default device</option></select></div>
 <div class="setting"><span class="setting-icon" aria-hidden="true">♫</span><div class="setting-copy"><div class="setting-title">Speaker output</div><div class="setting-sub">Uses Android’s active audio output</div></div></div>
 </section>
 <section class="output-card" aria-label="Output volume control"><div class="output-head"><label for="outputVolume">Monitoring volume</label><span id="outputVolumeValue">15%</span></div><input class="output-range" id="outputVolume" type="range" min="0" max="100" value="15" aria-label="Output volume"><div class="output-ends"><span>Low</span><span>High</span></div><p class="output-hint">Controls this app’s monitoring level, not your phone’s speaker volume. Choose your Bluetooth speaker in Android audio output settings.</p></section>
 <p class="safety">Start with low volume. If you hear echo or squealing, stop monitoring and move the phone away from the speaker.</p>
-<button class="stop" id="stopButton" disabled><span aria-hidden="true">■</span> Stop</button>
+</section>
 <div class="error" id="error" role="alert"></div>
 <footer class="footer">Audio stays on your device · No recording or uploads</footer>
 </main>
@@ -83,7 +87,7 @@ $('micButton').addEventListener('click',()=>stream?stopMic():startMic());$('stop
 $('monitorSwitch').addEventListener('click',()=>{monitoring=!monitoring;$('monitorSwitch').setAttribute('aria-checked',String(monitoring));$('monitorText').textContent=monitoring?'On — voice monitoring enabled':'Off — turn on when needed';if(monitorGain&&ctx)monitorGain.gain.setTargetAtTime(monitoring?Number($('outputVolume').value)/100:0,ctx.currentTime,.02);});
 $('deviceSelect').addEventListener('change',async()=>{const label=$('deviceSelect').selectedOptions[0]?.textContent||'Default device';$('deviceLabel').textContent=label;if(stream){stopMic();await startMic();if(!stream)$('deviceLabel').textContent=label+' — failed to reconnect';}});
 $('outputVolume').addEventListener('input',()=>{const v=Number($('outputVolume').value);$('outputVolumeValue').textContent=v+'%';if(monitorGain&&ctx&&monitoring)monitorGain.gain.setTargetAtTime(v/100,ctx.currentTime,.025);});
-$('settingsBtn').addEventListener('click',()=>{const open=$('settingsBtn').getAttribute('aria-expanded')==='true';$('settingsBtn').setAttribute('aria-expanded',String(!open));$('settings').classList.toggle('settings-open',!open);$('settings').scrollIntoView({behavior:'smooth',block:open?'nearest':'center'});if(!open)$('deviceSelect').focus({preventScroll:true});});
+$('settingsBtn').addEventListener('click',()=>{const open=$('settingsBtn').getAttribute('aria-expanded')==='true';const show=!open;$('settingsBtn').setAttribute('aria-expanded',String(show));$('settingsPanel').hidden=!show;if(show){$('settingsPanel').scrollIntoView({behavior:'smooth',block:'nearest'});$('settingsPanel').focus({preventScroll:true});}else{$('settingsBtn').focus({preventScroll:true});}});
 document.addEventListener('visibilitychange',()=>{if(ctx&&stream){if(document.hidden)ctx.suspend().catch(()=>{});else ctx.resume().catch(()=>{});}});
 window.addEventListener('pagehide',stopMic);
 if(navigator.mediaDevices?.addEventListener)navigator.mediaDevices.addEventListener('devicechange',refreshDevices);
