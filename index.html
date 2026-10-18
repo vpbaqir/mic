@@ -2,55 +2,95 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#edf2fb"><meta name="description" content="Simple live microphone monitoring.">
+<meta name="theme-color" content="#f3eee8"><meta name="description" content="Simple live microphone monitoring.">
 <title>MIC — Simple Microphone</title>
 <style>
-:root{color-scheme:light;--bg:#edf2fb;--panel:#edf2fb;--ink:#172849;--muted:#596b8d;--blue:#4f7dff;--violet:#8452ff;--shadow:10px 10px 24px #cbd5e7,-10px -10px 24px #fff;--inset:inset 4px 4px 10px #d2dbea,inset -4px -4px 10px #fff}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#fff 0%,var(--bg) 60%);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;justify-content:center}
-button,select,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7196ff;outline-offset:3px}
-.app{width:min(100%,480px);min-height:100dvh;padding:clamp(22px,5vw,34px) 22px calc(25px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
-.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(34px,8vh,65px)}
-.brand{font-size:clamp(32px,8vw,42px);font-weight:850;letter-spacing:-.07em;line-height:1}.brand sup{font-size:.45em;color:var(--violet);vertical-align:top}.subtitle{color:#7181a2;margin-top:6px;font-size:15px}
-.iconbtn{width:54px;height:54px;border:0;border-radius:50%;background:var(--panel);box-shadow:6px 6px 14px #cbd5e7,-6px -6px 14px #fff;color:#526487;font-size:23px}
+:root{
+ color-scheme:light;
+ --bg:#f3eee8;--panel:#f3eee8;--ink:#2c2530;--muted:#786c78;
+ --accent:#df654e;--accent-dark:#b94a3d;--plum:#76506f;--cream:#fffaf5;
+ --shadow:9px 9px 22px #d8cfc6,-9px -9px 22px #fffdf9;
+ --inset:inset 4px 4px 9px #ded5cc,inset -4px -4px 9px #fffdf9;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -8%,#fffaf5 0%,var(--bg) 64%);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;justify-content:center}
+button,select,input{font:inherit}
+button{cursor:pointer;touch-action:manipulation}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #df8a72;outline-offset:3px}
+.app{width:min(100%,500px);min-height:100dvh;padding:clamp(22px,5vw,34px) 22px calc(25px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(28px,6vh,50px)}
+.brand{font-size:clamp(32px,8vw,42px);font-weight:850;letter-spacing:-.075em;line-height:1}
+.brand sup{font-size:.45em;color:var(--accent);vertical-align:top}
+.subtitle{color:var(--muted);margin-top:7px;font-size:14px;letter-spacing:.01em}
+.iconbtn{width:52px;height:52px;border:0;border-radius:18px;background:var(--panel);box-shadow:6px 6px 14px #d8cfc6,-6px -6px 14px #fffdf9;color:var(--plum);display:grid;place-items:center;transition:transform .2s,box-shadow .2s,color .2s}
+.iconbtn svg{width:23px;height:23px;transition:transform .25s}
+.iconbtn:hover{color:var(--accent);transform:translateY(-1px)}
+.iconbtn:active{box-shadow:var(--inset);transform:scale(.97)}
+.iconbtn[aria-expanded=true] svg{transform:rotate(35deg)}
 .hero{display:flex;flex-direction:column;align-items:center;text-align:center}
-.mic-wrap{width:min(68vw,260px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:var(--bg);box-shadow:inset 10px 10px 22px #d4deef,inset -10px -10px 22px #fff;position:relative;margin:0 auto 22px}
-.mic-button{width:72%;height:72%;border:0;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#e4ebf8);box-shadow:10px 10px 24px #c5d1e8,-10px -10px 24px #fff;color:#415679;transition:transform .18s,box-shadow .18s}
+.mic-wrap{width:min(63vw,240px);aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:var(--bg);box-shadow:inset 10px 10px 22px #ded5cc,inset -10px -10px 22px #fffdf9;position:relative;margin:0 auto 22px}
+.mic-button{width:72%;height:72%;border:0;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fffaf5,#e9e0d8);box-shadow:9px 9px 22px #d8cfc6,-9px -9px 22px #fffdf9;color:var(--plum);transition:transform .18s,box-shadow .18s,background .18s}
 .mic-button svg{width:32%;height:32%}
-.mic-button.live{color:#fff;background:linear-gradient(145deg,#6595ff,#5542f4);box-shadow:0 0 0 9px #dbe5ff,0 0 0 19px #e4ebff,0 16px 30px #8aa5ff99}
+.mic-button.live{color:#fff;background:linear-gradient(145deg,#ed866b,#c95049);box-shadow:0 0 0 8px #f0d8cd,0 0 0 17px #f7e9e0,0 16px 30px #c96d4c55}
 .mic-button:active{transform:scale(.97)}
-.state-title{font-size:clamp(22px,5.5vw,28px);font-weight:800;letter-spacing:-.04em;margin:0}
-.state-desc{color:var(--muted);font-size:15px;margin:4px 0 0}
-.wave{width:100%;height:76px;display:flex;align-items:center;justify-content:center;gap:5px;margin:20px 0 22px}
-.wave span{width:clamp(3px,1.1vw,6px);max-width:7px;height:4px;border-radius:9px;background:linear-gradient(#9dbbff,#a79bff);opacity:.24;transition:height .08s,opacity .08s}.wave.idle span{height:4px!important;opacity:.2!important}
-.level-card,.setting{background:var(--panel);box-shadow:var(--shadow);border-radius:22px}
-.level-card{padding:20px 20px 18px;width:100%;text-align:left}
-.level-head{display:flex;align-items:center;gap:12px}.level-icon{font-size:24px;color:#53668a}.level-label{font-size:14px;font-weight:650}.level-number{margin-left:auto;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
-.track{height:13px;border-radius:99px;background:#d7e0f0;box-shadow:var(--inset);margin:16px 0 0 36px;overflow:hidden}
-.fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#4d8dff,#8d48fa);transition:width .08s}
-.settings-panel{margin-top:18px}
-#settingsPanel[hidden]{display:none!important}
-.settings{display:grid;gap:14px;margin-top:0}
-.setting{min-height:78px;padding:15px 17px;display:flex;align-items:center;gap:13px}
-.setting-icon{width:43px;height:43px;flex:0 0 43px;border-radius:50%;display:grid;place-items:center;background:var(--bg);box-shadow:inset 3px 3px 7px #d2dbea,inset -3px -3px 7px #fff;color:#53668a}
-.setting-copy{min-width:0;flex:1}.setting-title{font-size:14px;font-weight:750}.setting-sub{font-size:12px;color:var(--muted);margin-top:3px;white-space:normal;overflow-wrap:anywhere;line-height:1.35}
-.switch{position:relative;width:56px;height:32px;border:0;border-radius:99px;background:#d3dced;box-shadow:inset 3px 3px 7px #c4cee0,inset -3px -3px 7px #fff;flex:0 0 auto}
-.switch:after{content:"";position:absolute;width:24px;height:24px;left:4px;top:4px;border-radius:50%;background:linear-gradient(145deg,#fff,#e7edf8);box-shadow:2px 2px 5px #b9c5d9;transition:left .18s}
-.switch[aria-checked=true]{background:linear-gradient(110deg,#4b80ff,#7552ff)}
-.switch[aria-checked=true]:after{left:28px;background:#fff}
-select{width: min(46%,190px);min-width:112px;max-width:190px;border:0;outline-offset:3px;color:#405678;background:transparent;font-size:12px;text-align:right;flex:0 0 auto}
-.stop{width:82%;align-self:center;margin-top:22px;min-height:58px;border:0;border-radius:999px;background:linear-gradient(110deg,#ff777f,#e93d65);color:#fff;font-size:17px;font-weight:750;box-shadow:0 12px 24px #ed6b8590;display:flex;justify-content:center;align-items:center;gap:12px}
-.stop:disabled{opacity:.38;box-shadow:none;cursor:not-allowed}
-.output-card{margin-top:14px;padding:17px 20px 18px;border-radius:20px;background:var(--panel);box-shadow:var(--shadow)}.output-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px;font-weight:750}.output-hint{font-size:11px;line-height:1.45;color:var(--muted);margin-top:5px}.output-range{width:100%;margin:13px 0 0;accent-color:#6d62ff}.output-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.safety{margin:12px 2px 0;color:#7181a2;font-size:11px;line-height:1.45;text-align:center}
-@media(max-height:760px){.app{padding-top:18px}.top{margin-bottom:20px}.mic-wrap{width:min(48vw,190px);margin-bottom:12px}.wave{height:50px;margin:10px 0 14px}.settings{gap:10px;margin-top:12px}.setting{min-height:64px;padding:11px 14px}.setting-icon{width:36px;height:36px;flex-basis:36px}.output-card{margin-top:10px;padding:13px 16px}.stop{margin-top:13px;min-height:50px}.footer{padding-top:15px}}
-.error{display:none;margin-top:15px;padding:12px 14px;border-radius:14px;background:#fff0f0;color:#a32c42;border:1px solid #ffd1d6;font-size:13px}
-.footer{margin-top:auto;padding-top:26px;text-align:center;color:#91a0bb;font-size:11px}
-@media(min-height:850px){.app{padding-top:32px}.top{margin-bottom:45px}.mic-wrap{width:245px}.wave{margin:23px 0}.footer{padding-top:32px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+.state-title{font-size:clamp(24px,5.5vw,30px);font-weight:800;letter-spacing:-.045em;margin:0}
+.state-desc{color:var(--muted);font-size:14px;margin:7px 0 0}
+.wave{width:100%;height:66px;display:flex;align-items:center;justify-content:center;gap:5px;margin:17px 0 19px}
+.wave span{width:clamp(3px,1.1vw,6px);max-width:7px;height:4px;border-radius:9px;background:linear-gradient(#e5a06f,#b678a5);opacity:.24;transition:height .08s,opacity .08s}
+.wave.idle span{height:4px!important;opacity:.18!important}
+.level-card,.setting{background:var(--panel);box-shadow:var(--shadow);border-radius:23px}
+.level-card{padding:19px 20px 18px;width:100%;text-align:left;border:1px solid #fff8f1}
+.level-head{display:flex;align-items:center;gap:12px}
+.level-icon{font-size:23px;color:var(--plum)}
+.level-label{font-size:13px;font-weight:750;letter-spacing:.01em}
+.level-number{margin-left:auto;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent-dark)}
+.track{height:11px;border-radius:99px;background:#e6ded6;box-shadow:var(--inset);margin:15px 0 0 35px;overflow:hidden}
+.fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,#df865f,#b65d83);transition:width .08s}
+.stop{width:82%;align-self:center;margin-top:18px;min-height:54px;border:0;border-radius:18px;background:linear-gradient(110deg,#e67a61,#c95053);color:#fff;font-size:15px;font-weight:750;letter-spacing:.01em;box-shadow:0 10px 20px #c96d4c35;display:flex;justify-content:center;align-items:center;gap:10px;transition:transform .18s,box-shadow .18s,background .18s}
+.stop:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 13px 23px #c96d4c45}
+.stop:active:not(:disabled){transform:scale(.99)}
+.stop:disabled{background:#e9e0d8;color:#9c8e91;box-shadow:inset 2px 2px 5px #dcd2c8,inset -2px -2px 5px #fffaf5;cursor:not-allowed}
+.settings-panel{margin-top:20px;opacity:1;transform:translateY(0);transition:opacity .22s,transform .22s}
+.settings-panel[hidden]{display:none!important}
+.settings-panel.is-opening{opacity:0;transform:translateY(8px)}
+.settings-heading{display:flex;align-items:end;justify-content:space-between;gap:14px;padding:2px 3px 13px}
+.settings-kicker{display:block;font-size:10px;font-weight:800;letter-spacing:.17em;color:var(--accent-dark);margin-bottom:5px}
+.settings-heading h2{font-size:21px;letter-spacing:-.04em;margin:0;font-weight:800}
+.settings-note{font-size:11px;color:var(--muted);padding-bottom:3px}
+.settings{display:grid;gap:12px;margin-top:0}
+.setting{min-height:74px;padding:14px 15px;display:flex;align-items:center;gap:13px;border:1px solid #fff8f1}
+.setting-icon{width:42px;height:42px;flex:0 0 42px;border-radius:15px;display:grid;place-items:center;background:var(--bg);box-shadow:inset 3px 3px 7px #ded5cc,inset -3px -3px 7px #fffdf9;color:var(--plum);font-size:20px}
+.setting-copy{min-width:0;flex:1}
+.setting-title{font-size:13px;font-weight:800;letter-spacing:.005em}
+.setting-sub{font-size:12px;color:var(--muted);margin-top:4px;white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+.switch{position:relative;width:54px;height:31px;border:0;border-radius:99px;background:#e0d7ce;box-shadow:inset 3px 3px 7px #d4c9bf,inset -3px -3px 7px #fffaf5;flex:0 0 auto;transition:background .2s}
+.switch:after{content:"";position:absolute;width:23px;height:23px;left:4px;top:4px;border-radius:50%;background:linear-gradient(145deg,#fffaf5,#eae0d8);box-shadow:2px 2px 5px #c9bdb2;transition:left .18s}
+.switch[aria-checked=true]{background:linear-gradient(110deg,#e67d60,#bf5578)}
+.switch[aria-checked=true]:after{left:27px;background:#fffaf5}
+select{width:min(46%,190px);min-width:112px;max-width:190px;border:0;outline-offset:3px;color:#5d4b5f;background:transparent;font-size:12px;text-align:right;flex:0 0 auto}
+.output-card{margin-top:12px;padding:17px 18px 16px;border-radius:22px;background:var(--panel);box-shadow:var(--shadow);border:1px solid #fff8f1}
+.output-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;font-weight:800}
+#outputVolumeValue{color:var(--accent-dark);font-variant-numeric:tabular-nums}
+.output-hint{font-size:11px;line-height:1.5;color:var(--muted);margin:6px 0 0}
+.output-range{width:100%;margin:14px 0 0;accent-color:var(--accent)}
+.output-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.safety{margin:12px 4px 0;color:var(--muted);font-size:11px;line-height:1.5;text-align:center}
+.error{display:none;margin-top:15px;padding:13px 14px;border-radius:15px;background:#fff0e9;color:#963e36;border:1px solid #efd1c7;font-size:13px}
+.footer{margin-top:auto;padding-top:25px;text-align:center;color:#998a98;font-size:11px;letter-spacing:.01em}
+@media(max-height:760px){
+ .app{padding-top:18px}.top{margin-bottom:18px}.mic-wrap{width:min(45vw,170px);margin-bottom:10px}.wave{height:44px;margin:8px 0 12px}
+ .settings-panel{margin-top:15px}.settings{gap:9px}.setting{min-height:63px;padding:10px 13px}.setting-icon{width:36px;height:36px;flex-basis:36px;border-radius:13px}
+ .output-card{margin-top:9px;padding:13px 15px}.stop{margin-top:12px;min-height:49px}.footer{padding-top:15px}
+}
+@media(max-width:360px){.app{padding-left:16px;padding-right:16px}.setting{gap:9px;padding-left:11px;padding-right:11px}.setting-icon{width:34px;height:34px;flex-basis:34px}select{min-width:100px;font-size:11px}.output-card{padding-left:15px;padding-right:15px}}
+@media(min-height:850px){.app{padding-top:30px}.top{margin-bottom:36px}.mic-wrap{width:230px}.wave{margin:18px 0}.footer{padding-top:28px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <main class="app">
-<header class="top"><div><div class="brand">MIC<sup>•</sup></div><div class="subtitle">Simple Microphone</div></div><button class="iconbtn" id="settingsBtn" aria-label="Audio settings" title="Audio settings" aria-expanded="false">⚙</button></header>
+<header class="top"><div><div class="brand">MIC<sup>•</sup></div><div class="subtitle">Simple Microphone</div></div><button class="iconbtn" id="settingsBtn" aria-label="Show audio settings" title="Audio settings" aria-expanded="false" aria-controls="settingsPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.8 3.12-.08-.03a1.7 1.7 0 0 0-1.87.34l-.06.06h-3.6l-.02-.08a1.7 1.7 0 0 0-1.2-1.44 1.7 1.7 0 0 0-1.8.49l-.06.06-3.12-1.8.03-.08a1.7 1.7 0 0 0-.34-1.87l-.06-.06v-3.6l.08-.02a1.7 1.7 0 0 0 1.44-1.2 1.7 1.7 0 0 0-.49-1.8l-.06-.06 1.8-3.12.08.03a1.7 1.7 0 0 0 1.87-.34l.06-.06h3.6l.02.08a1.7 1.7 0 0 0 1.2 1.44 1.7 1.7 0 0 0 1.8-.49l.06-.06 3.12 1.8-.03.08a1.7 1.7 0 0 0 .34 1.87l.06.06v3.6z"/></svg></button></header>
 <section class="hero" aria-label="Microphone">
 <div class="mic-wrap"><button class="mic-button" id="micButton" aria-label="Tap to start microphone" aria-pressed="false"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><rect x="24" y="5" width="16" height="34" rx="8" fill="currentColor"/><path d="M14 30v3a18 18 0 0 0 36 0v-3M32 51v8" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/></svg></button></div>
 <h1 class="state-title" id="stateTitle">Tap to start</h1><p class="state-desc" id="stateDesc">Your voice, in real time.</p>
@@ -59,12 +99,13 @@ select{width: min(46%,190px);min-width:112px;max-width:190px;border:0;outline-of
 <section class="level-card" aria-label="Microphone input level"><div class="level-head"><span class="level-icon" aria-hidden="true">▥</span><span class="level-label">Input Level</span><span class="level-number" id="levelNumber">0%</span></div><div class="track"><div class="fill" id="levelFill"></div></div></section>
 <button class="stop" id="stopButton" disabled><span aria-hidden="true">■</span> Stop microphone</button>
 <section class="settings-panel" id="settingsPanel" aria-label="Audio settings" tabindex="-1" hidden>
+<div class="settings-heading"><div><span class="settings-kicker">PERSONALIZE</span><h2>Audio settings</h2></div><span class="settings-note">On this device</span></div>
 <section class="settings" id="settings">
 <div class="setting"><span class="setting-icon" aria-hidden="true">♬</span><div class="setting-copy"><div class="setting-title">Monitoring</div><div class="setting-sub" id="monitorText">Off — turn on when needed</div></div><button class="switch" id="monitorSwitch" role="switch" aria-checked="false" aria-label="Enable audio monitoring"></button></div>
 <div class="setting"><span class="setting-icon" aria-hidden="true">♩</span><div class="setting-copy"><div class="setting-title">Microphone</div><div class="setting-sub" id="deviceLabel">Default device</div></div><select id="deviceSelect" aria-label="Choose microphone"><option value="">Default device</option></select></div>
 <div class="setting"><span class="setting-icon" aria-hidden="true">♫</span><div class="setting-copy"><div class="setting-title">Speaker output</div><div class="setting-sub">Uses Android’s active audio output</div></div></div>
 </section>
-<section class="output-card" aria-label="Output volume control"><div class="output-head"><label for="outputVolume">Monitoring volume</label><span id="outputVolumeValue">15%</span></div><input class="output-range" id="outputVolume" type="range" min="0" max="100" value="15" aria-label="Output volume"><div class="output-ends"><span>Low</span><span>High</span></div><p class="output-hint">Controls this app’s monitoring level, not your phone’s speaker volume. Choose your Bluetooth speaker in Android audio output settings.</p></section>
+<section class="output-card" aria-label="Output volume control"><div class="output-head"><label for="outputVolume">Monitoring volume</label><span id="outputVolumeValue">15%</span></div><input class="output-range" id="outputVolume" type="range" min="0" max="100" value="15" aria-label="Monitoring volume"><div class="output-ends"><span>Low</span><span>High</span></div><p class="output-hint">Controls this app’s monitoring level, not your phone’s speaker volume. Choose your Bluetooth speaker in Android audio output settings.</p></section>
 <p class="safety">Start with low volume. If you hear echo or squealing, stop monitoring and move the phone away from the speaker.</p>
 </section>
 <div class="error" id="error" role="alert"></div>
@@ -87,7 +128,7 @@ $('micButton').addEventListener('click',()=>stream?stopMic():startMic());$('stop
 $('monitorSwitch').addEventListener('click',()=>{monitoring=!monitoring;$('monitorSwitch').setAttribute('aria-checked',String(monitoring));$('monitorText').textContent=monitoring?'On — voice monitoring enabled':'Off — turn on when needed';if(monitorGain&&ctx)monitorGain.gain.setTargetAtTime(monitoring?Number($('outputVolume').value)/100:0,ctx.currentTime,.02);});
 $('deviceSelect').addEventListener('change',async()=>{const label=$('deviceSelect').selectedOptions[0]?.textContent||'Default device';$('deviceLabel').textContent=label;if(stream){stopMic();await startMic();if(!stream)$('deviceLabel').textContent=label+' — failed to reconnect';}});
 $('outputVolume').addEventListener('input',()=>{const v=Number($('outputVolume').value);$('outputVolumeValue').textContent=v+'%';if(monitorGain&&ctx&&monitoring)monitorGain.gain.setTargetAtTime(v/100,ctx.currentTime,.025);});
-$('settingsBtn').addEventListener('click',()=>{const open=$('settingsBtn').getAttribute('aria-expanded')==='true';const show=!open;$('settingsBtn').setAttribute('aria-expanded',String(show));$('settingsPanel').hidden=!show;if(show){$('settingsPanel').scrollIntoView({behavior:'smooth',block:'nearest'});$('settingsPanel').focus({preventScroll:true});}else{$('settingsBtn').focus({preventScroll:true});}});
+$('settingsBtn').addEventListener('click',()=>{const show=$('settingsBtn').getAttribute('aria-expanded')!=='true';const panel=$('settingsPanel');$('settingsBtn').setAttribute('aria-expanded',String(show));$('settingsBtn').setAttribute('aria-label',show?'Hide audio settings':'Show audio settings');if(show){panel.hidden=false;panel.classList.add('is-opening');requestAnimationFrame(()=>{requestAnimationFrame(()=>panel.classList.remove('is-opening'));});panel.scrollIntoView({behavior:'smooth',block:'nearest'});panel.focus({preventScroll:true});}else{panel.hidden=true;$('settingsBtn').focus({preventScroll:true});}});
 document.addEventListener('visibilitychange',()=>{if(ctx&&stream){if(document.hidden)ctx.suspend().catch(()=>{});else ctx.resume().catch(()=>{});}});
 window.addEventListener('pagehide',stopMic);
 if(navigator.mediaDevices?.addEventListener)navigator.mediaDevices.addEventListener('devicechange',refreshDevices);
